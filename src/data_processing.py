@@ -1,19 +1,11 @@
 import pandas as pd
 import re
 
-INITIAL_FILE = "../data/raw_companies.parquet"
-CLEANED_FILE = "../data/cleaned_companies.parquet"
+from src.utils.general_utils import clean_text
+
 
 def load_data(file_path):
     return pd.read_parquet(file_path)
-
-
-def clean_text(text):
-    if pd.isnull(text):
-        return None
-    text = text.lower().strip()
-    text = re.sub(r'[^a-zA-Z0-9 ]', '', text)
-    return text
 
 
 def clean_company_names(df):
@@ -55,11 +47,6 @@ def clean_addresses(df):
     return df
 
 
-def handle_missing_values(df):
-    df.replace({'\\N': None, '': None}, inplace=True)
-    return df
-
-
 def save_cleaned_data(df, file_path):
     df.to_parquet(file_path, index=False)
-    print(f"Cleaned data saved to {file_path}")
+    print(f"Processed data saved to {file_path}")
