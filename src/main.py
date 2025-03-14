@@ -1,28 +1,26 @@
-from data_processing import (
-    load_data, clean_company_names, clean_websites, clean_addresses,
-    save_cleaned_data
-)
-from utils.general_utils import handle_missing_values
-from utils.country_utils import remove_exact_duplicates, standardize_countries
+from data_processing import preprocess_data, load_data
+from similarity import find_similar_companies
 
-# File paths
 INITIAL_FILE = "../data/raw_companies.parquet"
 CLEANED_FILE = "../data/cleaned_companies.parquet"
+SIMILARITY_FILE = "../data/similarity_results.parquet"
+
 
 def main():
-    df = load_data(INITIAL_FILE)
+    # PREPROCESSING
+    # df = preprocess_data()
 
-    df = handle_missing_values(df)
-    df = clean_company_names(df)
-    df = clean_websites(df)
-    df = clean_addresses(df)
+    # LOAD CLEANED DATA
+    print("Loading cleaned dataset...")
+    df = load_data(CLEANED_FILE)
 
-    df = remove_exact_duplicates(df)
+    # FIND SIMILAR COMPANIES
+    final_similarity_df = find_similar_companies(df)
 
-    df = standardize_countries(df)
+    # SAVE SIMILARITY RESULTS
+    print(f"Saving similarity data for next step: {SIMILARITY_FILE}")
+    final_similarity_df.to_parquet(SIMILARITY_FILE, index=False)
 
-    save_cleaned_data(df, CLEANED_FILE)
 
 if __name__ == "__main__":
     main()
-

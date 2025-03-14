@@ -1,7 +1,11 @@
 import pandas as pd
 import re
+from utils.general_utils import clean_text, handle_missing_values
+from utils.country_utils import remove_exact_duplicates, standardize_countries
 
-from src.utils.general_utils import clean_text
+# File paths
+INITIAL_FILE = "../data/raw_companies.parquet"
+CLEANED_FILE = "../data/cleaned_companies.parquet"
 
 
 def load_data(file_path):
@@ -49,4 +53,16 @@ def clean_addresses(df):
 
 def save_cleaned_data(df, file_path):
     df.to_parquet(file_path, index=False)
-    print(f"Processed data saved to {file_path}")
+
+
+def preprocess_data():
+    df = load_data(INITIAL_FILE)
+    df = handle_missing_values(df)
+    df = clean_company_names(df)
+    df = clean_websites(df)
+    df = clean_addresses(df)
+    df = remove_exact_duplicates(df)
+    df = standardize_countries(df)
+
+    save_cleaned_data(df, CLEANED_FILE)
+    return df
