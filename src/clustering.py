@@ -5,7 +5,7 @@ import pandas as pd
 SIMILARITY_FILE = "../data/similarity_results.parquet"
 GROUPED_FILE_PARQUET = "../data/grouped_companies.parquet"
 GROUPED_FILE_CSV = "../data/grouped_companies.csv"
-SIMILARITY_THRESHOLD = 92  # Adjust threshold for stricter clustering
+SIMILARITY_THRESHOLD = 92
 
 
 def group_similar_companies():
