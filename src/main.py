@@ -1,6 +1,6 @@
-from clustering import group_similar_companies
-from data_processing import load_data, preprocess_data
-from similarity import find_similar_companies
+from clustering_rule_based import group_similar_companies
+from data_processing import load_data
+from insights import run_insights
 
 # File paths
 INITIAL_FILE = "../data/raw_companies.parquet"
@@ -11,20 +11,21 @@ GROUPED_FILE_CSV = "../data/grouped_companies.csv"
 
 
 def main():
-    df = preprocess_data()
+    # STEP 1: Optional Preprocessing
+    # df = preprocess_data()
 
+    # STEP 2: Load enriched dataset
     df = load_data(CLEANED_FILE)
 
-    final_similarity_df = find_similar_companies(df)
+    # STEP 3: Optional Similarity Calculation
+    # final_similarity_df = find_similar_companies(df)
+    # final_similarity_df.to_parquet(SIMILARITY_FILE, index=False)
 
-    final_similarity_df.to_parquet(SIMILARITY_FILE, index=False)
-    print(f"Saved the similarity results to local file")
+    # STEP 4: Clustering
+    # group_similar_companies()
 
-    # STEP 5: CLUSTER SIMILAR COMPANIES
-    group_similar_companies()
-
-    print("\nCompleted the clustering process")
-
+    # STEP 5: Interpretation / Analysis
+    run_insights()
 
 if __name__ == "__main__":
     main()

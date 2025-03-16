@@ -27,7 +27,15 @@ def group_similar_companies():
 
     grouped_df = pd.DataFrame(company_to_group.items(), columns=["company_name", "group_id"])
 
+    additional_cols = df[["company_1", "main_country"]].drop_duplicates().rename(
+        columns={"company_1": "company_name"}
+    )
+
+    grouped_df = grouped_df.merge(additional_cols, on="company_name", how="left")
+
+    # Save
     grouped_df.to_parquet(GROUPED_FILE_PARQUET, index=False)
     grouped_df.to_csv(GROUPED_FILE_CSV, index=False)
 
+    print("Grouped companies with country info saved successfully!")
     return grouped_df
