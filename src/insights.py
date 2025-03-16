@@ -1,19 +1,28 @@
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 GROUPED_FILE_PARQUET = "../data/grouped_companies.parquet"
+SAMPLE_OUTPUT_CSV = "../data/sample_groups.csv"
+
 
 def run_insights():
     df = pd.read_parquet(GROUPED_FILE_PARQUET)
 
+    # Largest groups
     group_sizes = df["group_id"].value_counts()
     print("\nTop 10 Largest Groups:")
     print(group_sizes.head(10))
 
+    # Top N Groups
     sample_group_ids = group_sizes.head(10).index.tolist()
+    samples = []
     for group_id in sample_group_ids:
-        print(f"\nGroup ID {group_id} Sample:")
-        print(df[df["group_id"] == group_id][["company_name", "main_country", "group_id"]].head(5))
+        group_sample = df[df["group_id"] == group_id][["company_name", "main_country", "group_id"]].head(5)
+        samples.append(group_sample)
+
+    samples_df = pd.concat(samples)
+    samples_df.to_csv(SAMPLE_OUTPUT_CSV, index=False)
+    print(f"\n📂 Sample groups exported to: {SAMPLE_OUTPUT_CSV}")
 
     plt.figure(figsize=(12, 5))
 
