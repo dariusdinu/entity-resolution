@@ -1,9 +1,10 @@
-import pandas as pd
 import re
-from utils.general_utils import clean_text, handle_missing_values
-from utils.country_utils import remove_exact_duplicates, standardize_countries
 
-# File paths
+import pandas as pd
+
+from utils.country_utils import remove_exact_duplicates, standardize_countries
+from utils.general_utils import clean_text, handle_missing_values
+
 INITIAL_FILE = "../data/raw_companies.parquet"
 CLEANED_FILE = "../data/cleaned_companies.parquet"
 
@@ -13,20 +14,21 @@ def load_data(file_path):
 
 
 def clean_company_names(df):
-    suffixes = [" llc", " inc", " ltd", " co", " corporation", " corp", " gmbh", " srl"]
+    suffixes = [
+        " llc", " inc", " ltd", " co", " corporation", " corp", " gmbh", " srl", " pty",
+        " ag", " limited", " holdings", " enterprises", " solutions", " group", " systems"
+    ]
 
     def remove_suffix(name):
         if pd.isnull(name):
             return None
-        name = clean_text(name)
+        name = clean_text(name)  # Normalize text (lowercase, remove special characters)
         for suffix in suffixes:
             if name.endswith(suffix):
                 name = name.replace(suffix, '')
         return name.strip()
 
     df["company_name"] = df["company_name"].apply(remove_suffix)
-    df["company_legal_names"] = df["company_legal_names"].apply(remove_suffix)
-    df["company_commercial_names"] = df["company_commercial_names"].apply(remove_suffix)
     return df
 
 
@@ -35,7 +37,7 @@ def clean_websites(df):
         if pd.isnull(domain) or domain == '\\N':
             return None
         domain = domain.lower().strip()
-        domain = re.sub(r'^www\.', '', domain)  # Remove www.
+        domain = re.sub(r'^www\.', '', domain)  # Remove "www."
         domain = domain.split('/')[0]  # Remove URL paths
         return domain
 
