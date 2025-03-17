@@ -1,13 +1,15 @@
 from clustering_rule_based import group_similar_companies
 from clustering_XGBoost import group_similar_companies_ml as ml_clustering
-from data_processing import load_data
+from data_processing import load_data, preprocess_data
 from insights import run_insights
 from src.similarity import find_similar_companies
+from clustering_RF import group_similar_companies_rf
 
 # File paths
 INITIAL_FILE = "../data/raw_companies.parquet"
 CLEANED_FILE = "../data/cleaned_companies.parquet"
 SIMILARITY_FILE = "../data/similarity_results.parquet"
+
 
 def main():
     # STEP 1: Optional Preprocessing
@@ -28,6 +30,9 @@ def main():
     ml_clustering()
     run_insights("../data/grouped_companies_xgboost.parquet", "../data/sample_groups_xgboost.csv")
 
+    # ----- STEP 3c: Machine Learning-based Clustering (Random Forests) -----
+    group_similar_companies_rf()
+    run_insights("../data/grouped_companies_rf.parquet", "../data/sample_groups_rf.csv")
 
 
 if __name__ == "__main__":
