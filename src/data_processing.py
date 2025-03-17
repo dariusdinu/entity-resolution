@@ -22,21 +22,7 @@ def enrich_dataset(df):
 
 
 def clean_company_names(df):
-    suffixes = [
-        " llc", " inc", " ltd", " co", " corporation", " corp", " gmbh", " srl", " pty",
-        " ag", " limited", " holdings", " enterprises", " solutions", " group", " systems"
-    ]
-
-    def remove_suffix(name):
-        if pd.isnull(name):
-            return None
-        name = clean_text(name)
-        for suffix in suffixes:
-            if name.endswith(suffix):
-                name = name.replace(suffix, '')
-        return name.strip()
-
-    df["company_name"] = df["company_name"].apply(remove_suffix)
+    df["company_name"] = df["company_name"].apply(clean_text)
     return df
 
 

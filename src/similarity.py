@@ -33,7 +33,7 @@ def calculate_similarities(df):
 
 
 def calculate_weighted_similarity(name_sim, address_sim, website_sim):
-    return (name_sim * 0.7) + (address_sim * 0.2) + (website_sim * 0.1)
+    return (name_sim * 0.6) + (address_sim * 0.3) + (website_sim * 0.1)
 
 
 def find_similar_companies(df):

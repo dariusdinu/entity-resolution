@@ -3,8 +3,8 @@ import pandas as pd
 
 # File paths
 SIMILARITY_FILE = "../data/similarity_results.parquet"
-GROUPED_FILE_PARQUET = "../data/grouped_companies.parquet"
-GROUPED_FILE_CSV = "../data/grouped_companies.csv"
+GROUPED_FILE_PARQUET = "../data/grouped_companies_rule_based.parquet"
+GROUPED_FILE_CSV = "../data/grouped_companies_rule_based.csv"
 SIMILARITY_THRESHOLD = 92
 
 

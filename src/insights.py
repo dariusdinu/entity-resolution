@@ -1,12 +1,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-GROUPED_FILE_PARQUET = "../data/grouped_companies.parquet"
-SAMPLE_OUTPUT_CSV = "../data/sample_groups.csv"
 
-
-def run_insights():
-    df = pd.read_parquet(GROUPED_FILE_PARQUET)
+def run_insights(grouped_results_file, sample_groups_file):
+    df = pd.read_parquet(grouped_results_file)
 
     # Largest groups
     group_sizes = df["group_id"].value_counts()
@@ -21,8 +18,8 @@ def run_insights():
         samples.append(group_sample)
 
     samples_df = pd.concat(samples)
-    samples_df.to_csv(SAMPLE_OUTPUT_CSV, index=False)
-    print(f"\n📂 Sample groups exported to: {SAMPLE_OUTPUT_CSV}")
+    samples_df.to_csv(sample_groups_file, index=False)
+    print(f"\n📂 Sample groups exported to: {sample_groups_file}")
 
     plt.figure(figsize=(12, 5))
 
