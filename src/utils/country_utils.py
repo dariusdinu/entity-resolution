@@ -1,10 +1,6 @@
 import pycountry
 
 
-def remove_exact_duplicates(df):
-    return df.drop_duplicates()
-
-
 def standardize_countries(df):
     def get_country_name(code):
         try:

@@ -1,15 +1,18 @@
 import networkx as nx
 import pandas as pd
 
-# File paths
-SIMILARITY_FILE = "../data/similarity_results.parquet"
+from insights import run_insights
+from utils.final_results_utils import merge_with_original_data
+
 GROUPED_FILE_PARQUET = "../data/grouped_companies_rule_based.parquet"
 GROUPED_FILE_CSV = "../data/grouped_companies_rule_based.csv"
+SAMPLE_GROUPS_CSV = "../data/sample_groups_rule_based.csv"
+
 SIMILARITY_THRESHOLD = 92
 
 
-def group_similar_companies():
-    df = pd.read_parquet(SIMILARITY_FILE)
+def group_similar_companies(similarity_file, cleaned_file):
+    df = pd.read_parquet(similarity_file)
 
     df["weighted_similarity"] = df["weighted_similarity"] * 100
     df = df[df["weighted_similarity"] >= SIMILARITY_THRESHOLD]
@@ -33,9 +36,17 @@ def group_similar_companies():
 
     grouped_df = grouped_df.merge(additional_cols, on="company_name", how="left")
 
-    # Save
     grouped_df.to_parquet(GROUPED_FILE_PARQUET, index=False)
     grouped_df.to_csv(GROUPED_FILE_CSV, index=False)
 
     print("Grouped companies with country info saved successfully!")
+
+    merge_with_original_data(
+        grouped_df,
+        original_file=cleaned_file,
+        output_file="../data/final_rule_based_dataset.parquet"
+    )
+
+    run_insights(GROUPED_FILE_PARQUET, SAMPLE_GROUPS_CSV)
+
     return grouped_df

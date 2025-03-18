@@ -19,7 +19,7 @@ def run_insights(grouped_results_file, sample_groups_file):
 
     samples_df = pd.concat(samples)
     samples_df.to_csv(sample_groups_file, index=False)
-    print(f"\n📂 Sample groups exported to: {sample_groups_file}")
+    print(f"\nSample groups exported to: {sample_groups_file}")
 
     plt.figure(figsize=(12, 5))
 
