@@ -1,17 +1,17 @@
 # Entity Resolution Project
 
 ## Overview
-This project focuses on solving an **Entity Resolution** by identifying and grouping potential duplicate companies within a dataset containing real-world company records. The main objective is to detect and cluster companies that likely refer to the same entity, despite slight variations in the available information.
+The project aims to identify and correctly group duplicate records of companies within a large dataset. The main idea behind its solution is to detect and cluster data entries that are likely to refer to the same entity, giving slight variations in data.
 
-
-### 1.Data Preprocessing Pipeline
-- Cleaned raw company data from a `.parquet` file.
-- Applied a series of data enrichment rules:
-  - Filled missing `company_name` by falling back on `company_legal_names` and `company_commercial_names`.
-  - Enriched addresses using `main_address_raw_text` and fallback logic.
-  - Cleaned domain-related fields (extracting the first value when multiple exist).
-- Removed suffixes (e.g., "LLC", "Inc") and standardized key fields for similarity scoring.
-- Handled missing values and standardized country names.
+### 1. Data preprocessing 
+The first aspect that was taken into consideration was inspecting and refining the dataset. This meant inspecting multiple entries and identifying potential faults. This resulted in a series of rules that had to be applied:
+- Filling non-existent `company_name` by using the first value of `company_legal_names`. If that is not available, the first value of `company_commercial_names` is to be used instead.
+- In case address information from `main_address_raw_text` is not available, `main_street` is to be used instead.
+- Extracting the first value of the `domain` data, where multiple values existed.
+- Removed common company suffixes (e.g., "LLC", "Inc")
+- Standardized country names with the help of `pycountry` package and `main_country_code`
+- Removed special characters 
+- Replaced all other missing values `\N` with `None` in order to align with Python standards
 
 ### 2. Similarity Calculation
 - Calculated **weighted similarity scores** using:
@@ -21,7 +21,7 @@ This project focuses on solving an **Entity Resolution** by identifying and grou
 - Applied blocking by **country** to speed up the process.
 - Saved similarity results to a `.parquet` file for further clustering.
 
-### 3.Rule-Based Clustering
+### 3. Clustering the data
 - Implemented a **graph-based clustering algorithm** using NetworkX to group companies based on a configurable similarity threshold.
 - Successfully generated clusters (group IDs) and saved the grouped output.
 
