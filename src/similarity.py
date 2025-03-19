@@ -9,7 +9,17 @@ def levenshtein_similarity(str1, str2):
 
 
 def name_similarity(a, b):
+    if pd.isnull(a) or pd.isnull(b):
+        return 0
     return fuzz.token_sort_ratio(a, b) / 100
+
+
+def address_similarity(a, b):
+    if pd.isnull(a) or pd.isnull(b):
+        return 0
+    sort_sim = fuzz.token_sort_ratio(a, b)
+    set_sim = fuzz.token_set_ratio(a, b)
+    return max(sort_sim, set_sim) / 100
 
 
 def calculate_weighted_similarity(name_sim, address_sim, website_sim):
@@ -26,7 +36,7 @@ def calculate_similarities(df):
         for i in range(len(subset_df)):
             for j in range(i + 1, len(subset_df)):
                 name_sim = name_similarity(subset_df.iloc[i]["company_name"], subset_df.iloc[j]["company_name"])
-                address_sim = name_similarity(subset_df.iloc[i]["address"], subset_df.iloc[j]["address"])
+                address_sim = address_similarity(subset_df.iloc[i]["address"], subset_df.iloc[j]["address"])
                 website_sim = name_similarity(subset_df.iloc[i]["domains"], subset_df.iloc[j]["domains"])
                 weighted_sim = calculate_weighted_similarity(name_sim, address_sim, website_sim)
 

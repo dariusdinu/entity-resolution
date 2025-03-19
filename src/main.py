@@ -1,8 +1,8 @@
-from clustering_rule_based import group_similar_companies
-from clustering_XGBoost import group_similar_companies_XGBoost
-from data_processing import load_data, preprocess_data
+from src.rule_based_clustering import group_similar_companies
+from src.xgboost_clustering import group_similar_companies_XGBoost
+from preprocessing import load_data, preprocess_data
 from similarity import find_similar_companies
-from clustering_RF import group_similar_companies_rf
+from src.random_forest_clustering import group_similar_companies_rf
 
 INITIAL_FILE = "../data/raw_companies.parquet"
 CLEANED_FILE = "../data/cleaned_companies.parquet"

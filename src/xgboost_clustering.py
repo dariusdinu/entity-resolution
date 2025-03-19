@@ -1,11 +1,10 @@
-import pandas as pd
-import xgboost as xgb
 import networkx as nx
+import pandas as pd
+import xgboost
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 
-from insights import run_insights
-from utils.final_results_utils import merge_with_original_data
+from src.insights import run_insights
+from src.utils.final_merge import merge_with_original_data
 
 GROUPED_FILE_PARQUET = "../data/grouped_companies_xgboost.parquet"
 GROUPED_FILE_CSV = "../data/grouped_companies_xgboost.csv"
@@ -26,8 +25,7 @@ def group_similar_companies_XGBoost(similarity_file, cleaned_file):
 
     pos_weight = (len(y_train) - sum(y_train)) / (sum(y_train) + 1e-6)
 
-    model = xgb.XGBClassifier(
-        use_label_encoder=False,
+    model = xgboost.XGBClassifier(
         eval_metric='logloss',
         base_score=0.1,
         scale_pos_weight=pos_weight

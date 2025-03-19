@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from src.utils.name_cleaning_utils import clean_text
+from src.utils.name_cleaning import clean_text
 
 
 def clean_company_names(df):

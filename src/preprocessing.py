@@ -1,8 +1,8 @@
 import pandas as pd
 
-from src.utils.data_cleaning_utils import clean_company_names, clean_websites, clean_addresses
-from utils.country_utils import standardize_countries
-from utils.data_enrichment_utils import enrich_name, enrich_address, enrich_domain
+from src.utils.data_cleaning import clean_company_names, clean_websites, clean_addresses
+from utils.country import standardize_countries
+from utils.enrichment import enrich_name, enrich_address, enrich_domain
 
 INITIAL_FILE = "../data/raw_companies.parquet"
 CLEANED_FILE = "../data/cleaned_companies.parquet"
