@@ -3,21 +3,16 @@ import pandas as pd
 import xgboost
 from sklearn.model_selection import train_test_split
 
+from constants import XGBOOST_GROUPS_CSV, XGBOOST_SAMPLE_GROUPS_CSV, XGBOOST_GROUPS_PARQUET, \
+    XGBOOST_PREDICTION_THRESHOLD, XGBOOST_SIMILARITY_THRESHOLD
 from src.insights import run_insights
 from src.utils.final_merge import merge_with_original_data
-
-GROUPED_FILE_PARQUET = "../data/grouped_companies_xgboost.parquet"
-GROUPED_FILE_CSV = "../data/grouped_companies_xgboost.csv"
-SAMPLE_GROUPS_CSV = "../data/sample_groups_rule_xgboost.csv"
-
-PREDICTION_THRESHOLD = 0.5
-SIMILARITY_THRESHOLD = 0.75
 
 
 def group_similar_companies_XGBoost(similarity_file, cleaned_file):
     df = pd.read_parquet(similarity_file)
 
-    df["label"] = (df["weighted_similarity"] >= SIMILARITY_THRESHOLD).astype(int)
+    df["label"] = (df["weighted_similarity"] >= XGBOOST_SIMILARITY_THRESHOLD).astype(int)
 
     features = df[["name_similarity", "address_similarity", "website_similarity"]]
     labels = df["label"]
@@ -34,7 +29,7 @@ def group_similar_companies_XGBoost(similarity_file, cleaned_file):
     model.fit(X_train, y_train)
 
     probabilities = model.predict_proba(features)[:, 1]
-    df["predicted"] = (probabilities >= PREDICTION_THRESHOLD).astype(int)
+    df["predicted"] = (probabilities >= XGBOOST_PREDICTION_THRESHOLD).astype(int)
 
     G = nx.Graph()
     for _, row in df[df["predicted"] == 1].iterrows():
@@ -53,8 +48,8 @@ def group_similar_companies_XGBoost(similarity_file, cleaned_file):
     )
     grouped_df = grouped_df.merge(additional_cols, on="company_name", how="left")
 
-    grouped_df.to_parquet(GROUPED_FILE_PARQUET, index=False)
-    grouped_df.to_csv(GROUPED_FILE_CSV, index=False)
+    grouped_df.to_parquet(XGBOOST_GROUPS_PARQUET, index=False)
+    grouped_df.to_csv(XGBOOST_GROUPS_CSV, index=False)
     print("\nXGBoost grouping saved successfully!")
 
     merge_with_original_data(
@@ -63,6 +58,6 @@ def group_similar_companies_XGBoost(similarity_file, cleaned_file):
         output_file="../data/final_xgboost_dataset.parquet"
     )
 
-    run_insights(GROUPED_FILE_PARQUET, SAMPLE_GROUPS_CSV)
+    run_insights(XGBOOST_GROUPS_PARQUET, XGBOOST_SAMPLE_GROUPS_CSV)
 
     return grouped_df

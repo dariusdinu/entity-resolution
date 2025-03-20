@@ -4,18 +4,13 @@ from sklearn.ensemble import RandomForestClassifier
 
 from src.insights import run_insights
 from src.utils.final_merge import merge_with_original_data
-
-GROUPED_FILE_PARQUET = "../data/grouped_companies_rf.parquet"
-GROUPED_FILE_CSV = "../data/grouped_companies_rf.csv"
-SAMPLE_GROUPS_CSV = "../data/sample_groups_rule_rf.csv"
-
-SIMILARITY_THRESHOLD = 0.75
+from constants import RF_SIMILARITY_THRESHOLD, RF_GROUPS_CSV, RF_GROUPS_PARQUET, RF_SAMPLE_GROUPS_CSV
 
 
 def group_similar_companies_rf(similarity_file, cleaned_file):
     df = pd.read_parquet(similarity_file)
 
-    df["label"] = (df["weighted_similarity"] >= SIMILARITY_THRESHOLD).astype(int)
+    df["label"] = (df["weighted_similarity"] >= RF_SIMILARITY_THRESHOLD).astype(int)
 
     features = df[["name_similarity", "address_similarity", "website_similarity", "weighted_similarity"]]
     labels = df["label"]
@@ -42,8 +37,8 @@ def group_similar_companies_rf(similarity_file, cleaned_file):
     )
     grouped_df = grouped_df.merge(additional_cols, on="company_name", how="left")
 
-    grouped_df.to_parquet(GROUPED_FILE_PARQUET, index=False)
-    grouped_df.to_csv(GROUPED_FILE_CSV, index=False)
+    grouped_df.to_parquet(RF_GROUPS_PARQUET, index=False)
+    grouped_df.to_csv(RF_GROUPS_CSV, index=False)
     print("\nRandom Forest grouping saved successfully!")
 
     merge_with_original_data(
@@ -52,6 +47,6 @@ def group_similar_companies_rf(similarity_file, cleaned_file):
         output_file="../data/final_rf_dataset.parquet"
     )
 
-    run_insights(GROUPED_FILE_PARQUET, SAMPLE_GROUPS_CSV)
+    run_insights(RF_GROUPS_PARQUET, RF_SAMPLE_GROUPS_CSV)
 
     return grouped_df

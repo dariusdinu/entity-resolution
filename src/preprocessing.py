@@ -3,9 +3,7 @@ import pandas as pd
 from src.utils.data_cleaning import clean_company_names, clean_websites, clean_addresses
 from utils.country import standardize_countries
 from utils.enrichment import enrich_name, enrich_address, enrich_domain
-
-INITIAL_FILE = "../data/raw_companies.parquet"
-CLEANED_FILE = "../data/cleaned_companies.parquet"
+from constants import INITIAL_FILE, CLEANED_FILE
 
 
 def load_data(file_path):

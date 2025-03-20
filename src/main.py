@@ -1,12 +1,9 @@
-from src.rule_based_clustering import group_similar_companies
-from src.xgboost_clustering import group_similar_companies_XGBoost
+from constants import CLEANED_FILE, SIMILARITY_FILE
 from preprocessing import load_data, preprocess_data
 from similarity import find_similar_companies
 from src.random_forest_clustering import group_similar_companies_rf
-
-INITIAL_FILE = "../data/raw_companies.parquet"
-CLEANED_FILE = "../data/cleaned_companies.parquet"
-SIMILARITY_FILE = "../data/similarity_results.parquet"
+from src.rule_based_clustering import group_similar_companies
+from src.xgboost_clustering import group_similar_companies_XGBoost
 
 
 def main():
