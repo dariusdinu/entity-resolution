@@ -28,6 +28,7 @@ def handle_missing_values(df):
 
 
 def preprocess_data():
+    print("Preprocessing data...")
     df = load_data(INITIAL_FILE)
     df = handle_missing_values(df)
     df = enrich_dataset(df)

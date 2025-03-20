@@ -8,6 +8,8 @@ from constants import RF_SIMILARITY_THRESHOLD, RF_GROUPS_CSV, RF_GROUPS_PARQUET,
 
 
 def group_similar_companies_rf(similarity_file, cleaned_file):
+    print("Grouping companies using the Random Forest model...")
+
     df = pd.read_parquet(similarity_file)
 
     df["label"] = (df["weighted_similarity"] >= RF_SIMILARITY_THRESHOLD).astype(int)

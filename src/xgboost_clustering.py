@@ -10,6 +10,7 @@ from src.utils.final_merge import merge_with_original_data
 
 
 def group_similar_companies_XGBoost(similarity_file, cleaned_file):
+    print("Grouping companies using the XGBoost model...")
     df = pd.read_parquet(similarity_file)
 
     df["label"] = (df["weighted_similarity"] >= XGBOOST_SIMILARITY_THRESHOLD).astype(int)

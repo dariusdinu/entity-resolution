@@ -8,6 +8,7 @@ from src.utils.final_merge import merge_with_original_data
 
 
 def group_similar_companies(similarity_file, cleaned_file):
+    print("Grouping companies using the Rule-Based method...")
     df = pd.read_parquet(similarity_file)
 
     df["weighted_similarity"] = df["weighted_similarity"] * 100

@@ -46,5 +46,4 @@ def run_insights(grouped_results_file, sample_groups_file):
     plt.title("Group Size Composition")
 
     plt.tight_layout()
-    plt.savefig("../data/")
     plt.show()
