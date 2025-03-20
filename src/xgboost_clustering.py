@@ -11,12 +11,13 @@ GROUPED_FILE_CSV = "../data/grouped_companies_xgboost.csv"
 SAMPLE_GROUPS_CSV = "../data/sample_groups_rule_xgboost.csv"
 
 PREDICTION_THRESHOLD = 0.5
+SIMILARITY_THRESHOLD = 0.75
 
 
 def group_similar_companies_XGBoost(similarity_file, cleaned_file):
     df = pd.read_parquet(similarity_file)
 
-    df["label"] = (df["weighted_similarity"] >= 0.75).astype(int)
+    df["label"] = (df["weighted_similarity"] >= SIMILARITY_THRESHOLD).astype(int)
 
     features = df[["name_similarity", "address_similarity", "website_similarity"]]
     labels = df["label"]

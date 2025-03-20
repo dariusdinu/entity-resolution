@@ -2,12 +2,6 @@ import pandas as pd
 from rapidfuzz import fuzz
 
 
-def levenshtein_similarity(str1, str2):
-    if pd.isnull(str1) or pd.isnull(str2):
-        return 0
-    return fuzz.partial_ratio(str1, str2) / 100
-
-
 def name_similarity(a, b):
     if pd.isnull(a) or pd.isnull(b):
         return 0
@@ -22,8 +16,8 @@ def address_similarity(a, b):
     return max(sort_sim, set_sim) / 100
 
 
-def calculate_weighted_similarity(name_sim, address_sim, website_sim):
-    return (name_sim * 0.6) + (address_sim * 0.3) + (website_sim * 0.1)
+def calculate_weighted_similarity(name_sim, address_sim, domain_sim):
+    return (name_sim * 0.6) + (address_sim * 0.3) + (domain_sim * 0.1)
 
 
 def calculate_similarities(df):
@@ -37,8 +31,8 @@ def calculate_similarities(df):
             for j in range(i + 1, len(subset_df)):
                 name_sim = name_similarity(subset_df.iloc[i]["company_name"], subset_df.iloc[j]["company_name"])
                 address_sim = address_similarity(subset_df.iloc[i]["address"], subset_df.iloc[j]["address"])
-                website_sim = name_similarity(subset_df.iloc[i]["domains"], subset_df.iloc[j]["domains"])
-                weighted_sim = calculate_weighted_similarity(name_sim, address_sim, website_sim)
+                domain_sim = name_similarity(subset_df.iloc[i]["domains"], subset_df.iloc[j]["domains"])
+                weighted_sim = calculate_weighted_similarity(name_sim, address_sim, domain_sim)
 
                 results.append({
                     "company_1": subset_df.iloc[i]["company_name"],
@@ -47,7 +41,7 @@ def calculate_similarities(df):
                     "main_city": city,
                     "name_similarity": name_sim,
                     "address_similarity": address_sim,
-                    "website_similarity": website_sim,
+                    "website_similarity": domain_sim,
                     "weighted_similarity": weighted_sim,
                 })
 
