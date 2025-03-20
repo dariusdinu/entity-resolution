@@ -300,3 +300,7 @@ Regardless, there is always room for improvement and here are some aspects that 
 - Adjusting the weighted similarities in order to explore other results. By giving more importance to other fields, companies that have different names, but are the same entity might be discovered.
 - Experimenting with other models such as `LightGBM` or `CatBoost` to compare them with the current `XGBoost`.
 - Rethinking the similarity computation and utilizing parallel or distributed processing in order to satisfy future scaling needs.
+
+# Important aspects
+
+In order for the project to run properly, the initial data file must be renamed to `raw_companies.parquet` and placed inside a `data` directory on the same level with the source folder `src`.
